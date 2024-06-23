@@ -1,0 +1,12 @@
+name = "uuidv7"
+description = ""
+version = "0.1.0-dev"
+
+authors = ["Eric Jacoboni"]
+maintainers = ["Eric Jacoboni <eric.jacoboni@posteo.net>"]
+maintainers-logins = ["jaco60"]
+licenses = "MIT OR Apache-2.0 WITH LLVM-exception"
+website = ""
+tags = []
+
+executables = ["uuidv7"]

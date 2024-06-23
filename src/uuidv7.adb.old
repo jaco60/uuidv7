@@ -1,0 +1,53 @@
+with Ada.Text_IO;
+with Ada.Numerics.Discrete_Random;
+with Ada.Calendar;
+with Ada.Calendar.Conversions;
+with Interfaces.C;
+
+procedure Uuidv7 is
+   use Ada.Text_IO;
+   use Ada.Calendar;
+   use Ada.Calendar.Conversions;
+   use Interfaces.C;
+
+   Uuid_Size : constant Positive := 16;
+
+   type Byte is mod 2**8;
+   type Uuid is array (0 .. Uuid_Size - 1) of Byte;
+   
+   type Long is mod 2**48;
+
+   function Random_Uuid return Uuid is
+      package Random is new Ada.Numerics.Discrete_Random (Byte);
+      Gen    : Random.Generator;
+      Result : Uuid;
+   begin
+      Random.Reset (Gen);
+      Result := (others => Random.Random (Gen));
+      return Result;
+   end Random_Uuid;
+
+   Id        : Uuid          := Random_Uuid;
+   TimeStamp : constant Long := Long(To_Unix_Time (Clock) * 1000);
+begin
+   Put_Line ("TimeStamp: " & Long'Image (TimeStamp));
+
+   Id (0) := Byte (TimeStamp / 2 ** 40);
+   Put_Line ("Id(0): " & Id (0)'Image);
+   Id (1) := Byte (TimeStamp / 2 ** 32);
+   Put_Line ("Id(1): " & Byte'Image (Id(1)));
+   Id (2) := Byte (TimeStamp / 2 ** 24);
+   Put_Line ("Id(2): " & Byte'Image (Id(2)));
+--    -- Id (3) := Byte (shift_right (TimeStamp, 16));
+--  --Id (4) := Byte (shift_right (TimeStamp, 8));
+--   --  Id (5) := Byte (TimeStamp);
+
+--     Id (6) := (Id (6) and 16#0F#) or 16#70#;
+--      Put_Line ("Id(6): " & Byte'Image (Id(6)));
+--     Id (8) := (Id (8) and 16#3F#) or 16#80#;
+--      Put_Line ("Id(8): " & Byte'Image (Id(8)));
+
+   for i in Id'Range loop
+      Put (Id (i)'Image & " ");
+   end loop;
+end Uuidv7;
