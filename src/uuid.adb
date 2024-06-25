@@ -1,6 +1,8 @@
-package body Uuid is
+with Ada.Numerics.Float_Random;
+with Ada.Calendar.Conversions;
+with Interfaces.C;
 
-    
+package body Uuid is
    function Generate_UUIDv7 return UUIDv7 is
       use Interfaces.C;
       use Ada.Calendar;
@@ -11,40 +13,38 @@ package body Uuid is
       Now            : constant Time := Clock;
       Time_In_Millis : LLI           := LLI (To_Unix_Time (Now) * 1_000);
       Time_Hex       : String (1 .. 12);
-      Index          : Positive      := 1;
-
    begin
-      -- Convert time to hex string
+      --  Convert time to hex string
       for I in reverse 1 .. 12 loop
          Time_Hex (I)   := To_Hex (Integer (Time_In_Millis mod 16));
          Time_In_Millis := Time_In_Millis / 16;
       end loop;
 
-      -- Fill in the UUID parts
-      -- Set TimeStamp
+      --  Fill in the UUID parts
+      --  Set TimeStamp
       UUID (1 .. 8)   := Time_Hex (1 .. 8);
       UUID (9)        := '-';
       UUID (10 .. 13) := Time_Hex (9 .. 12);
       UUID (14)       := '-';
 
-      -- Set version: 7
+      --  Set version: 7
       UUID (15) := '7';
 
-      -- Set rand_a
+      --  Set rand_a
       for I in 16 .. 18 loop
          UUID (I) := Random_Hex;
       end loop;
 
-      -- Set variant: 8
+      --  Set variant: 8
       UUID (19 .. 20) := "-8";
 
-      -- Set rand_b
+      --  Set rand_b
       for I in 21 .. 23 loop
          UUID (I) := Random_Hex;
       end loop;
       UUID (24) := '-';
 
-      -- Fill remaining rand_b
+      --  Fill remaining rand_b
       for I in 25 .. 36 loop
          UUID (I) := Random_Hex;
       end loop;
