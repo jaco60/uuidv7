@@ -53,15 +53,17 @@ package body Uuid is
    end Generate_UUIDv7;
 
    function To_Hex (Value : Integer) return Character is
-      Hex_Chars : constant array (0 .. 15) of Character := "0123456789abcdef";
+      Hex_Chars : constant array (0 .. 15) of Character :=
+        "0123456789abcdef";
    begin
       if Value < 0 or else Value > 15 then
          raise Constraint_Error with "Value must be between 0 and 15";
       end if;
       return Hex_Chars (Value);
    end To_Hex;
-
+      
    function Random_Hex return Character is
+      
       use Ada.Numerics.Float_Random;
 
       Gen          : Generator;
