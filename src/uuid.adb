@@ -9,6 +9,7 @@ package body Uuid is
       use Ada.Calendar.Conversions;
 
       subtype LLI is Long_Long_Integer;
+
       UUID           : UUIDv7        := (others => '0');
       Now            : constant Time := Clock;
       Time_In_Millis : LLI           := LLI (To_Unix_Time (Now) * 1_000);
@@ -17,7 +18,7 @@ package body Uuid is
       --  Convert time to hex string
       for I in reverse 1 .. 12 loop
          Time_Hex (I)   := To_Hex (Integer (Time_In_Millis mod 16));
-         Time_In_Millis := Time_In_Millis / 16;
+         Time_In_Millis := @ / 16;
       end loop;
 
       --  Fill in the UUID parts
@@ -63,7 +64,6 @@ package body Uuid is
    end To_Hex;
       
    function Random_Hex return Character is
-      
       use Ada.Numerics.Float_Random;
 
       Gen          : Generator;
