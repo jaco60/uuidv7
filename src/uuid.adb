@@ -4,17 +4,18 @@ with Ada.Numerics.Float_Random;
 with Ada.Calendar.Conversions;
 with Interfaces.C;
 
+use Ada;
+
 package body Uuid is
+
    function Generate_UUIDv7 return UUIDv7 is
       use Interfaces.C;
-      use Ada.Calendar;
-      use Ada.Calendar.Conversions;
-
+      package Conversions renames Ada.Calendar.Conversions;
       subtype LLI is Long_Long_Integer;
 
-      UUID           : UUIDv7        := (others => '0');
-      Now            : constant Time := Clock;
-      Time_In_Millis : LLI           := LLI (To_Unix_Time (Now) * 1_000);
+      UUID           : UUIDv7                 := [others => '0'];
+      Now            : constant Calendar.Time := Calendar.Clock;
+      Time_In_Millis : LLI := LLI (Conversions.To_Unix_Time (Now) * 1_000);
       Time_Hex       : String (1 .. 12);
    begin
       --  Convert time to hex string
@@ -63,15 +64,15 @@ package body Uuid is
       end if;
       return Hex_Chars (Value);
    end To_Hex;
-      
-   function Random_Hex return Character is
-      use Ada.Numerics.Float_Random;
 
-      Gen          : Generator;
+   function Random_Hex return Character is
+      package Rand renames Numerics.Float_Random;
+
+      Gen          : Rand.Generator;
       Random_Value : Float;
    begin
-      Reset (Gen);
-      Random_Value := Random (Gen);
+      Rand.Reset (Gen);
+      Random_Value := Rand.Random (Gen);
       return To_Hex (Integer (15.0 * Random_Value));
    end Random_Hex;
 
