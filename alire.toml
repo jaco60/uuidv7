@@ -1,5 +1,5 @@
 name = "uuidv7"
-description = ""
+description = "Toy implementation of UUIDv7 in Ada 2022"
 version = "0.1.0"
 
 authors = ["Eric Jacoboni"]
