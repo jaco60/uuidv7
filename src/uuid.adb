@@ -8,12 +8,12 @@ use Ada;
 
 package body Uuid is
 
-   function Generate_UUIDv7 return UUIDv7 is
+   function Generate_UUIDv7_Str return UUIDv7_Str is
       use Interfaces.C;
       package Conversions renames Ada.Calendar.Conversions;
       subtype LLI is Long_Long_Integer;
 
-      UUID           : UUIDv7                 := [others => '0'];
+      UUID           : UUIDv7_Str             := [others => '0'];
       Now            : constant Calendar.Time := Calendar.Clock;
       Time_In_Millis : LLI := LLI (Conversions.To_Unix_Time (Now) * 1_000);
       Time_Hex       : String (1 .. 12);
@@ -54,7 +54,7 @@ package body Uuid is
       end loop;
 
       return UUID;
-   end Generate_UUIDv7;
+   end Generate_UUIDv7_Str;
 
    function To_Hex (Value : Integer) return Character is
       Hex_Chars : constant array (0 .. 15) of Character := "0123456789abcdef";
