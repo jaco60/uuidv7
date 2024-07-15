@@ -1,9 +1,16 @@
 package Uuid is
-   --subtype UUIDv7 is String (1 .. 16);
+
+   type Byte is mod 2**8;
+   type UUIDv7_Bin is array (1 .. 16) of Byte;
    subtype UUIDv7_Str is String (1 .. 36);
 
-   --function Generate_UUIDv7 return UUIDv7;
-   function Generate_UUIDv7_Str return UUIDv7_Str;
+   type UUIDv7 is record
+      Binary : UUIDv7_Bin;
+      String : UUIDv7_Str;
+   end record;
+
+   function Generate_UUIDv7 (Binary : Boolean := True) return UUIDv7;
+
 private
    function To_Hex (Value : Integer) return Character;
    function Random_Hex return Character;
